@@ -271,7 +271,7 @@ class ProductPage extends StatelessWidget {
                                           TextSpan(
                                             text: "0.88 KWD ",
                                             style: TextStyle(
-                                              fontSize: 16,
+                                              fontSize: 15,
                                               color: Colors.black,
                                               fontWeight: FontWeight.bold,
                                             ),
@@ -280,7 +280,7 @@ class ProductPage extends StatelessWidget {
                                             text: "Learn More",
                                             style: TextStyle(
                                               fontSize: 14,
-                                              color: Colors.blue,
+                                              color: Colors.black,
                                               decoration:
                                                   TextDecoration.underline,
                                             ),
@@ -320,8 +320,8 @@ class ProductPage extends StatelessWidget {
                             const Text(
                               "Quantity",
                               style: TextStyle(
-                                fontWeight: FontWeight.w500,
                                 fontSize: 18,
+                                color: Colors.grey,
                               ),
                             ),
                             SizedBox(height: 10),
@@ -350,22 +350,65 @@ class ProductPage extends StatelessWidget {
 
                             const SizedBox(height: 16),
 
-                            /// Product Information
-                            const Text(
-                              "PRODUCT INFORMATION",
-                              style: TextStyle(fontWeight: FontWeight.w600),
-                            ),
-                            const SizedBox(height: 8),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 100.0),
-                              child: Text(
-                                removeHtmlTags(product.data?.description ?? ''),
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  height: 1.4,
+                            Obx(() {
+                              final text = removeHtmlTags(
+                                controller.product.value?.data?.description ??
+                                    '',
+                              );
+                              final isExpanded =
+                                  controller.isDescriptionExpanded.value;
+
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 100.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    /// PRODUCT INFORMATION Row with Arrow
+                                    GestureDetector(
+                                      onTap: controller.toggleDescription,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text(
+                                            "PRODUCT INFORMATION",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          AnimatedRotation(
+                                            turns: isExpanded
+                                                ? 0.5
+                                                : 0.0, // rotate 180° when expanded
+                                            duration: const Duration(
+                                              milliseconds: 200,
+                                            ),
+                                            child: const Icon(
+                                              Icons.keyboard_arrow_down,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+
+                                    /// Description Text
+                                    Text(
+                                      text,
+                                      maxLines: isExpanded ? null : 1,
+                                      overflow: isExpanded
+                                          ? TextOverflow.visible
+                                          : TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        height: 1.4,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ),
+                              );
+                            }),
                           ],
                         ),
                       ),

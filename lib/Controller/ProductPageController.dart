@@ -9,6 +9,7 @@ class ProductController extends GetxController {
   var selectedImageIndex = 0.obs;
   late PageController pageController;
   var quantity = 1.obs;
+  var isDescriptionExpanded = false.obs; // <-- Add this
 
   @override
   void onInit() {
@@ -16,15 +17,25 @@ class ProductController extends GetxController {
     pageController = PageController();
     fetchProduct();
   }
+
   List<String> get eyeImages {
     final options = product.value?.data?.configurableOption;
     if (options != null && options.isNotEmpty) {
       return options.first.attributes
-          ?.map((attr) => (attr.images?.isNotEmpty ?? false) ? attr.images!.first : "")
-          .where((url) => url.isNotEmpty)
-          .toList() ?? [];
+              ?.map(
+                (attr) => (attr.images?.isNotEmpty ?? false)
+                    ? attr.images!.first
+                    : "",
+              )
+              .where((url) => url.isNotEmpty)
+              .toList() ??
+          [];
     }
     return [];
+  }
+
+  void toggleDescription() {
+    isDescriptionExpanded.value = !isDescriptionExpanded.value;
   }
 
   Future<void> fetchProduct() async {

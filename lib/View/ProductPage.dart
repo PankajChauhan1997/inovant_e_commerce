@@ -6,10 +6,6 @@ class ProductPage extends StatelessWidget {
   final ProductController controller = Get.put(ProductController());
   ProductPage({super.key});
 
-  String removeHtmlTags(String htmlText) {
-    return htmlText.replaceAll(RegExp(r'<[^>]*>'), '').trim();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,7 +71,6 @@ class ProductPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      /// Product Image
                       AspectRatio(
                         aspectRatio: 1,
                         child: PageView.builder(
@@ -98,8 +93,6 @@ class ProductPage extends StatelessWidget {
                           },
                         ),
                       ),
-
-                      /// Dots Indicator
                       if (imagesList.isNotEmpty)
                         Obx(
                           () => Row(
@@ -135,7 +128,6 @@ class ProductPage extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            /// Name & Price
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -160,8 +152,6 @@ class ProductPage extends StatelessWidget {
                               ],
                             ),
                             const SizedBox(height: 2),
-
-                            /// Brand & SKU
                             Text(
                               product.data?.name ?? '',
                               style: const TextStyle(
@@ -179,8 +169,6 @@ class ProductPage extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 16),
-
-                            /// Color Selector
                             const Text(
                               "Color:",
                               style: TextStyle(
@@ -196,7 +184,7 @@ class ProductPage extends StatelessWidget {
                                 children: List.generate(imagesList.length, (
                                   index,
                                 ) {
-                                  return GestureDetector(
+                                  return InkWell(
                                     onTap: () {
                                       controller.selectedImageIndex.value =
                                           index;
@@ -290,9 +278,8 @@ class ProductPage extends StatelessWidget {
                                     ),
                                   ),
                                   Card(
-                                    color:
-                                        Colors.green[200], // Green background
-                                    elevation: 2, // Card shadow
+                                    color: Colors.green[200],
+                                    elevation: 2,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(4),
                                     ),
@@ -306,7 +293,7 @@ class ProductPage extends StatelessWidget {
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 14,
-                                          color: Colors.black, // Black text
+                                          color: Colors.black,
                                         ),
                                       ),
                                     ),
@@ -315,8 +302,6 @@ class ProductPage extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 16),
-
-                            /// Quantity Selector - Updated with proper alignment
                             const Text(
                               "Quantity",
                               style: TextStyle(
@@ -331,7 +316,7 @@ class ProductPage extends StatelessWidget {
                                   if (controller.quantity.value > 1) {
                                     controller.quantity.value--;
                                   }
-                                }, alignment: Alignment.center),
+                                }),
                                 Padding(
                                   padding: const EdgeInsets.all(4.0),
                                   child: Container(
@@ -355,7 +340,7 @@ class ProductPage extends StatelessWidget {
                                 ),
                                 _qtyButton("+", () {
                                   controller.quantity.value++;
-                                }, alignment: Alignment.center),
+                                }),
                               ],
                             ),
 
@@ -371,7 +356,6 @@ class ProductPage extends StatelessWidget {
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  // Product Information Header
                                   InkWell(
                                     onTap: controller.toggleDescription,
                                     child: Container(
@@ -414,7 +398,6 @@ class ProductPage extends StatelessWidget {
                                     ),
                                   ),
 
-                                  // Only show description if expanded
                                   if (isExpanded) ...[
                                     const SizedBox(height: 12),
                                     Text(
@@ -438,7 +421,6 @@ class ProductPage extends StatelessWidget {
                   ),
                 ),
 
-                /// Sticky Bottom Buttons
                 Positioned(
                   bottom: 0,
                   left: 0,
@@ -499,11 +481,7 @@ class ProductPage extends StatelessWidget {
     );
   }
 
-  Widget _qtyButton(
-    String text,
-    VoidCallback onTap, {
-    AlignmentGeometry alignment = Alignment.center,
-  }) {
+  Widget _qtyButton(String text, VoidCallback onTap) {
     bool isMinus = text == "-";
     return InkWell(
       onTap: onTap,
@@ -514,13 +492,13 @@ class ProductPage extends StatelessWidget {
           color: isMinus ? Colors.grey : Colors.black,
           border: Border.all(color: Colors.grey.shade400),
         ),
-        alignment: alignment,
+        alignment: Alignment.center,
         child: Text(
           text,
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 18,
-            color: Colors.white, // White text for plus button
+            color: Colors.white,
           ),
         ),
       ),

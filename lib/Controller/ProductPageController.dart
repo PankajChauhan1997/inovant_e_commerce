@@ -9,7 +9,7 @@ class ProductController extends GetxController {
   var selectedImageIndex = 0.obs;
   late PageController pageController;
   var quantity = 1.obs;
-  var isDescriptionExpanded = false.obs; // <-- Add this
+  var isDescriptionExpanded = false.obs;
 
   @override
   void onInit() {
@@ -50,12 +50,11 @@ class ProductController extends GetxController {
       final response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
-        // final productModel = ProductModel.fromJson(json.decode(response.body));
-        // product.value = productModel.data;
         product.value = productModelFromJson(response.body);
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
       print("Error fetching product: $e");
+      print("stackTrace fetching product: $stackTrace");
     } finally {
       isLoading(false);
     }

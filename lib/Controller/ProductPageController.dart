@@ -38,6 +38,10 @@ class ProductController extends GetxController {
     isDescriptionExpanded.value = !isDescriptionExpanded.value;
   }
 
+  String removeHtmlTags(String htmlText) {
+    return htmlText.replaceAll(RegExp(r'<[^>]*>'), '').trim();
+  }
+
   Future<void> fetchProduct() async {
     try {
       isLoading(true);

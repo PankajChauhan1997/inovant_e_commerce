@@ -186,7 +186,7 @@ class ProductPage extends StatelessWidget {
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 16,
-                                color: Colors.black,
+                                color: Colors.grey,
                               ),
                             ),
                             const SizedBox(height: 8),
@@ -262,7 +262,7 @@ class ProductPage extends StatelessWidget {
                                         children: const <TextSpan>[
                                           TextSpan(
                                             text:
-                                                "or 4 interest-free payments of ",
+                                                "or 4 interest-free payments\n ",
                                             style: TextStyle(
                                               fontSize: 14,
                                               color: Colors.black,
@@ -271,7 +271,7 @@ class ProductPage extends StatelessWidget {
                                           TextSpan(
                                             text: "0.88 KWD ",
                                             style: TextStyle(
-                                              fontSize: 15,
+                                              fontSize: 14,
                                               color: Colors.black,
                                               fontWeight: FontWeight.bold,
                                             ),
@@ -289,9 +289,9 @@ class ProductPage extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(width: 20),
                                   Card(
-                                    color: Colors.green, // Green background
+                                    color:
+                                        Colors.green[200], // Green background
                                     elevation: 2, // Card shadow
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(4),
@@ -320,7 +320,7 @@ class ProductPage extends StatelessWidget {
                             const Text(
                               "Quantity",
                               style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 16,
                                 color: Colors.grey,
                               ),
                             ),
@@ -332,13 +332,24 @@ class ProductPage extends StatelessWidget {
                                     controller.quantity.value--;
                                   }
                                 }, alignment: Alignment.center),
-                                SizedBox(
-                                  width: 40,
-                                  child: Obx(
-                                    () => Text(
-                                      controller.quantity.value.toString(),
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(fontSize: 16),
+                                Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Container(
+                                    height: 40,
+                                    width: 60,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.grey.shade300,
+                                      ),
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: Obx(
+                                      () => Text(
+                                        controller.quantity.value.toString(),
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(fontSize: 16),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -349,23 +360,34 @@ class ProductPage extends StatelessWidget {
                             ),
 
                             const SizedBox(height: 16),
-
                             Obx(() {
-                              final text = removeHtmlTags(
+                              final text = controller.removeHtmlTags(
                                 controller.product.value?.data?.description ??
                                     '',
                               );
                               final isExpanded =
                                   controller.isDescriptionExpanded.value;
 
-                              return Padding(
-                                padding: const EdgeInsets.only(bottom: 100.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    /// PRODUCT INFORMATION Row with Arrow
-                                    GestureDetector(
-                                      onTap: controller.toggleDescription,
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Product Information Header
+                                  InkWell(
+                                    onTap: controller.toggleDescription,
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 12,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        border: Border(
+                                          top: BorderSide(
+                                            color: Colors.grey.shade300,
+                                          ),
+                                          bottom: BorderSide(
+                                            color: Colors.grey.shade300,
+                                          ),
+                                        ),
+                                      ),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
@@ -374,12 +396,11 @@ class ProductPage extends StatelessWidget {
                                             "PRODUCT INFORMATION",
                                             style: TextStyle(
                                               fontWeight: FontWeight.w600,
+                                              fontSize: 16,
                                             ),
                                           ),
                                           AnimatedRotation(
-                                            turns: isExpanded
-                                                ? 0.5
-                                                : 0.0, // rotate 180° when expanded
+                                            turns: isExpanded ? 0.5 : 0.0,
                                             duration: const Duration(
                                               milliseconds: 200,
                                             ),
@@ -391,24 +412,25 @@ class ProductPage extends StatelessWidget {
                                         ],
                                       ),
                                     ),
-                                    const SizedBox(height: 8),
+                                  ),
 
-                                    /// Description Text
+                                  // Only show description if expanded
+                                  if (isExpanded) ...[
+                                    const SizedBox(height: 12),
                                     Text(
                                       text,
-                                      maxLines: isExpanded ? null : 1,
-                                      overflow: isExpanded
-                                          ? TextOverflow.visible
-                                          : TextOverflow.ellipsis,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 14,
-                                        height: 1.4,
+                                        height: 1.5,
+                                        color: Colors.grey[700],
                                       ),
                                     ),
                                   ],
-                                ),
+                                  const SizedBox(height: 40),
+                                ],
                               );
                             }),
+                            const SizedBox(height: 30),
                           ],
                         ),
                       ),
@@ -486,8 +508,8 @@ class ProductPage extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        width: 32,
-        height: 32,
+        width: 40,
+        height: 40,
         decoration: BoxDecoration(
           color: isMinus ? Colors.grey : Colors.black,
           border: Border.all(color: Colors.grey.shade400),
